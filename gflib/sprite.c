@@ -52,7 +52,6 @@ static void SortSprites(u32 *spritePriorities, s32 n);
 static u32 CreateSpriteAt(u32 index, const struct SpriteTemplate *template, s16 x, s16 y, u32 subpriority);
 static void ResetOamMatrices(void);
 static void ResetSprite(struct Sprite *sprite);
-static void RequestSpriteFrameImageCopy(u16 index, u16 tileNum, const struct SpriteFrameImage *images);
 static void ResetAllSprites(void);
 static void BeginAnim(struct Sprite *sprite);
 static void ContinueAnim(struct Sprite *sprite);
@@ -75,7 +74,6 @@ static void AffineAnimCmd_end(u8 matrixNum, struct Sprite *sprite);
 static void AffineAnimCmd_frame(u8 matrixNum, struct Sprite *sprite);
 static void CopyOamMatrix(u8 destMatrixIndex, struct OamMatrix *srcMatrix);
 static u8 GetSpriteMatrixNum(struct Sprite *sprite);
-static void SetSpriteOamFlipBits(struct Sprite *sprite, u8 hFlip, u8 vFlip);
 static void AffineAnimStateRestartAnim(u8 matrixNum);
 static void AffineAnimStateStartAnim(u8 matrixNum, u8 animNum);
 static void AffineAnimStateReset(u8 matrixNum);
@@ -1465,7 +1463,7 @@ u16 LoadSpriteSheet(const struct SpriteSheet *sheet)
 }
 
 // Like LoadSpriteSheet, but checks if already loaded, and uses template image frames
-u16 LoadSpriteSheetByTemplate(const struct SpriteTemplate *template, u32 frame, s32 offset)
+u16 LoadSpriteSheetByTemplateWithOffset(const struct SpriteTemplate *template, u32 frame, s32 offset)
 {
     u16 tileStart;
     struct SpriteSheet sheet;
@@ -1478,6 +1476,20 @@ u16 LoadSpriteSheetByTemplate(const struct SpriteTemplate *template, u32 frame, 
     sheet.size = template->images[frame].size;
     sheet.tag = template->tileTag;
     return LoadSpriteSheetWithOffset(&sheet, offset);
+}
+// Like LoadSpriteSheet, but checks if already, and uses template image frames
+u16 LoadSpriteSheetByTemplate(const struct SpriteTemplate *template, u8 frame) {
+    u16 tileStart;
+    struct SpriteSheet tempSheet;
+    // error if template is null or tile tag or images not set
+    if (!template || template->tileTag == TAG_NONE || !template->images)
+        return 0xFFFF;
+    if ((tileStart = GetSpriteTileStartByTag(template->tileTag)) != 0xFFFF) // return if already loaded
+        return tileStart;
+    tempSheet.data = template->images[frame].data;
+    tempSheet.size = template->images[frame].size;
+    tempSheet.tag = template->tileTag;
+    return LoadSpriteSheet(&tempSheet);
 }
 
 void LoadSpriteSheets(const struct SpriteSheet *sheets)
@@ -1596,9 +1608,16 @@ void LoadSpritePalettes(const struct SpritePalette *palettes)
             break;
 }
 
+u8 LoadSpritePaletteInSlot(const struct SpritePalette *palette, u8 paletteNum) {
+    paletteNum = min(15, paletteNum);
+    sSpritePaletteTags[paletteNum] = palette->tag;
+    DoLoadSpritePalette(palette->data, paletteNum * 16);
+    return paletteNum;
+}
+
 void DoLoadSpritePalette(const u16 *src, u16 paletteOffset)
 {
-    LoadPalette(src, OBJ_PLTT_OFFSET + paletteOffset, PLTT_SIZE_4BPP);
+    LoadPaletteFast(src, paletteOffset + OBJ_PLTT_OFFSET, PLTT_SIZE_4BPP);
 }
 
 u8 AllocSpritePalette(u16 tag)

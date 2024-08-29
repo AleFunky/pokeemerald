@@ -8,6 +8,7 @@
 #include "contest_util.h"
 #include "contest_painting.h"
 #include "data.h"
+#include "decompress.h"
 #include "decoration.h"
 #include "decoration_inventory.h"
 #include "event_data.h"
@@ -630,6 +631,12 @@ static bool8 IsPaletteNotActive(void)
         return FALSE;
 }
 
+// pauses script until palette fade inactive
+bool8 ScrFunc_WaitPaletteNotActive(struct ScriptContext *ctx) {
+    SetupNativeScript(ctx, IsPaletteNotActive);
+    return TRUE;
+}
+
 bool8 ScrCmd_fadescreen(struct ScriptContext *ctx)
 {
     FadeScreen(ScriptReadByte(ctx), 0);
@@ -650,22 +657,25 @@ bool8 ScrCmd_fadescreenspeed(struct ScriptContext *ctx)
 bool8 ScrCmd_fadescreenswapbuffers(struct ScriptContext *ctx)
 {
     u8 mode = ScriptReadByte(ctx);
+    u8 nowait = ScriptReadByte(ctx);
 
     switch (mode)
     {
     case FADE_TO_BLACK:
     case FADE_TO_WHITE:
     default:
-        CpuCopy32(gPlttBufferUnfaded, gPaletteDecompressionBuffer, PLTT_SIZE);
+        CpuCopy32(gPlttBufferUnfaded, gDecompressionBuffer, PLTT_SIZE);
         FadeScreen(mode, 0);
         break;
     case FADE_FROM_BLACK:
     case FADE_FROM_WHITE:
-        CpuCopy32(gPaletteDecompressionBuffer, gPlttBufferUnfaded, PLTT_SIZE);
+        CpuCopy32(gDecompressionBuffer, gPlttBufferUnfaded, PLTT_SIZE);
         FadeScreen(mode, 0);
         break;
     }
 
+    if (nowait)
+        return FALSE;
     SetupNativeScript(ctx, IsPaletteNotActive);
     return TRUE;
 }

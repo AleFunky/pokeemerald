@@ -4671,3 +4671,5 @@ const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Follower = {
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
 };
+
+const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BallLight = {TAG_NONE, OBJ_EVENT_PAL_TAG_LIGHT, OBJ_EVENT_PAL_TAG_LIGHT_2, 512, 32, 32, 2, SHADOW_SIZE_NONE, TRUE, FALSE, TRACKS_NONE, &gObjectEventBaseOam_32x32, sOamTables_32x32, sAnimTable_Inanimate, gFieldEffectObjectPicTable_BallLight, gDummySpriteAffineAnimTable};

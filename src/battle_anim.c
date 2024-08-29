@@ -2145,12 +2145,9 @@ static void Cmd_stopsound(void)
 
 static void Cmd_jumpifmovetypeequal(void)
 {
-    u8 moveType;
     const u8 *type = sBattleAnimScriptPtr + 1;
     sBattleAnimScriptPtr += 2;
-    GET_MOVE_TYPE(gCurrentMove, moveType);
-
-    if (*type != moveType)
+    if (*type != GetMoveType(gCurrentMove))
         sBattleAnimScriptPtr += 4;
     else
         sBattleAnimScriptPtr = T2_READ_PTR(sBattleAnimScriptPtr);

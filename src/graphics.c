@@ -1959,7 +1959,7 @@ const u32 gUnionRoomChat_Keyboard_Gfx[] = INCBIN_U32("graphics/union_room_chat/k
 const u32 gUnionRoomChat_Keyboard_Tilemap[] = INCBIN_U32("graphics/union_room_chat/keyboard.bin.lz");
 const u32 gUnionRoomChat_RButtonLabels[] = INCBIN_U32("graphics/union_room_chat/r_button_labels.4bpp.lz");
 
-const u16 gTilesetPalettes_General[][16] =
+const u16 ALIGNED(4) gTilesetPalettes_General[][16] =
 {
     INCBIN_U16("data/tilesets/primary/general/palettes/00.gbapal"),
     INCBIN_U16("data/tilesets/primary/general/palettes/01.gbapal"),
@@ -2060,3 +2060,9 @@ const u16 gFrontierPassCancelButtonHighlighted_Tilemap[] = INCBIN_U16("graphics/
 const u16 gBerryCrush_Crusher_Pal[] = INCBIN_U16("graphics/berry_crush/crusher.gbapal");
 const u32 gBerryCrush_Crusher_Gfx[] = INCBIN_U32("graphics/berry_crush/crusher.4bpp.lz");
 const u32 gBerryCrush_TextWindows_Tilemap[] = INCBIN_U32("graphics/berry_crush/text_windows.bin.lz");
+
+const u32 gBattleIcons_Gfx1[] = INCBIN_U32("graphics/types/battle_icons1.4bpp.lz");
+const u32 gBattleIcons_Gfx2[] = INCBIN_U32("graphics/types/battle_icons2.4bpp.lz");
+const u32 gBattleIcons_Pal1[] = INCBIN_U32("graphics/types/battle_icons1.gbapal.lz");
+const u32 gBattleIcons_Pal2[] = INCBIN_U32("graphics/types/battle_icons2.gbapal.lz");
+
