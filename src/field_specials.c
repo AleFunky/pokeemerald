@@ -1108,12 +1108,14 @@ static void PCTurnOffEffect(void)
     // Get where the PC should be, depending on where the player is looking.
     u8 playerDirection = GetPlayerFacingDirection();
 
-    if (IsPlayerInFrontOfPC() == FALSE)
-        return;
     if(gSysPcFromPokenav){
         gSysPcFromPokenav = FALSE;
         return;
     }
+
+    if (IsPlayerInFrontOfPC() == FALSE)
+        return;
+    
     switch (playerDirection)
     {
     case DIR_NORTH:
