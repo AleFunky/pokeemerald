@@ -211,7 +211,7 @@ const struct SpeciesInfo gSpeciesInfo[] =
                                 {EVO_ITEM, ITEM_MOOMOO_MILK, SPECIES_NONE}),
         //.formSpeciesIdTable = sNoneFormSpeciesIdTable,
         //.formChangeTable = sNoneFormChangeTable,
-        //.perfectIVCount = NUM_STATS,
+        .allPerfectIVs = TRUE,
     },
     */
 };

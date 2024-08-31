@@ -17,6 +17,8 @@
 #include "util.h"
 #include "constants/battle_anim.h"
 
+#define IS_DOUBLE_BATTLE() ((gBattleTypeFlags & BATTLE_TYPE_DOUBLE))
+
 extern const struct OamData gOamData_AffineNormal_ObjNormal_64x64;
 
 static void AnimTranslateLinear_WithFollowup_SetCornerVecX(struct Sprite *sprite);
@@ -661,6 +663,12 @@ static void UNUSED TranslateSpriteToBattleAttackerPos(struct Sprite *sprite)
 #undef sStartY
 #undef sTargetY
 
+static void UNUSED EndUnkPaletteAnim(struct Sprite *sprite)
+{
+    PaletteStruct_ResetById(sprite->data[5]);
+    DestroySpriteAndMatrix(sprite);
+}
+
 void RunStoredCallbackWhenAffineAnimEnds(struct Sprite *sprite)
 {
     if (sprite->affineAnimEnded)
@@ -864,6 +872,11 @@ bool8 IsBattlerSpritePresent(u8 battlerId)
         }
         return TRUE;
     }
+}
+
+bool8 IsDoubleBattle(void)
+{
+    return IS_DOUBLE_BATTLE();
 }
 
 #define BG_ANIM_PAL_1        8
