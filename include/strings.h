@@ -2939,4 +2939,7 @@ extern const u8 gText_PM[];
 extern const u8 gText_PlayerScurriedToCenter[];
 extern const u8 gText_PlayerScurriedBackHome[];
 
+extern const u8 gText_SaveFileOldUpdated[];
+extern const u8 gText_SaveFileOldErrored[];
+
 #endif // GUARD_STRINGS_H
